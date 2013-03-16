@@ -1,10 +1,9 @@
 var redis = require("redis");
-var tty = require("tty");
-var sys = require("sys");
 
 var st = process.openStdin();
 
 client = redis.createClient();
+client1 = redis.createClient();
 
 client.on("subscribe", function (channel, count) {
   console.log("You have joined channel: " + channel);
@@ -27,12 +26,12 @@ st.addListener("data", function(input)
 		client.unsubscribe();
 		client.end();
 	}
-	if(userData.toString().startsWith(":join"))
+	else if(userData.toString().startsWith(":join:"))
 	{
 		var channel = userData.toString().replace(":join:", "");
 		client.subscribe(channel);
 	}
-	else if(userData.toString().startsWith(":leave"))
+	else if(userData.toString().startsWith(":leave:"))
 	{
 		var channel = userData.toString().replace(":leave:", "");
 		client.unsubscribe(channel);
@@ -41,14 +40,18 @@ st.addListener("data", function(input)
 	{
 		var index = userData.toString().indexOf(":");
 		var channel = userData.toString().substring(0, index);
+		if(channel.toString() === "")
+		{
+			return;
+		}
+		
 		var message = userData.toString().substring(index + 1);
-		client.publish(channel, message);
+		client1.publish(channel, message);
 	}
 });
 
 if (typeof String.prototype.startsWith != 'function') {
-  // see below for better implementation!
   String.prototype.startsWith = function (str){
-    return this.indexOf(str) == 0;
+    return this.slice(0, str.length) == str;
   };
 }
