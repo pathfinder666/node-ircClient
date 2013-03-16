@@ -22,9 +22,15 @@ st.addListener("data", function(input)
 	var userData = input.toString().trim();
 	if(userData === ":quit")
 	{
-		console.log("bye bye");
+		
 		client.unsubscribe();
+		
 		client.end();
+		client1.end();
+		
+		console.log("bye bye");
+				
+		process.exit(1);
 	}
 	else if(userData.toString().startsWith(":join:"))
 	{
