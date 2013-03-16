@@ -1,5 +1,9 @@
 This is an IRC chat-server written in node.js using redis
 
+Requirements:
+Install Redis and start redis server on default port
+Install redis client for node.js "npm install redis"
+
 This uses redis pub/sub to achieve IRC chat-server communication
 
 Usage:
